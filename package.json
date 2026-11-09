@@ -1,0 +1,62 @@
+{
+  "name": "homegrid-software",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=24.12.0 <25"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "node --conditions=react-server --import tsx --test tests/unit/security-policy.test.ts tests/unit/device-validation.test.ts tests/unit/simulator.test.ts tests/unit/session-policy.test.ts tests/unit/outbox-domain-runner.test.ts tests/unit/outbox-processing.test.ts && node --import tsx --test tests/unit/device-registry-views.test.tsx",
+    "test:security": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-3-security.test.ts\"",
+    "test:audit-consistency": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-7b-firestore-audit.test.ts\"",
+    "test:simulator": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-5-simulator.test.ts\"",
+    "test:auth-workflows": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-6-auth.test.ts\"",
+    "test:account-access": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-7c-account-access.test.ts\"",
+    "test:session-signout": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-8a-session-signout.test.ts\"",
+    "test:session-signout-recovery": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-8d-session-signout-recovery.test.ts\"",
+    "test:outbox-bounded": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/sw-01-8c-bounded-outbox.test.ts\"",
+    "process:account-access-operations": "node --conditions=react-server --import tsx scripts/process-account-access-operations.ts",
+    "process:account-access-operations:demo": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx scripts/process-account-access-operations.ts\"",
+    "process:session-signouts:demo": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx scripts/process-session-signout-operations.ts\"",
+    "process:outboxes:demo": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx scripts/process-outboxes-demo.ts\"",
+    "test": "npm run test:unit && npm run test:security && npm run test:audit-consistency && npm run test:account-access && npm run test:session-signout && npm run test:session-signout-recovery && npm run test:outbox-bounded && npm run test:simulator && npm run test:auth-workflows && npm run test:firebase",
+    "bootstrap:super-admin": "node --conditions=react-server --import tsx scripts/bootstrap-super-admin.ts",
+    "firebase:emulators:start": "firebase emulators:start --project demo-homegrid --only auth,firestore",
+    "test:firebase:auth": "firebase emulators:exec --project demo-homegrid --only auth \"node --conditions=react-server --import tsx --test tests/integration/firebase-auth-emulator.test.ts\"",
+    "test:firebase": "firebase emulators:exec --project demo-homegrid --only auth,firestore \"node --conditions=react-server --import tsx --test tests/integration/firebase-emulators.test.ts\""
+  },
+  "dependencies": {
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "firebase": "13.2.0",
+    "firebase-admin": "14.5.0",
+    "next": "16.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "server-only": "0.0.1",
+    "tailwind-merge": "3.4.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.3.1",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "24.10.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.5",
+    "firebase-tools": "15.35.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/grpc-js": "1.14.7"
+    }
+  }
+}

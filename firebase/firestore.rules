@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Browser access remains denied in SW-01.3. Admin SDK
+    // Admin SDK requests bypass these rules and require server-service checks.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
